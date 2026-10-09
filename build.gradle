@@ -1,0 +1,42 @@
+buildscript {
+    repositories {
+        mavenCentral()
+        maven { url = 'https://repo.grails.org/grails/core' }
+    }
+    dependencies {
+        classpath "org.apache.grails:grails-gradle-plugins:$grailsVersion"
+    }
+}
+
+apply plugin: 'groovy'
+apply plugin: 'org.apache.grails.gradle.grails-web'
+
+repositories {
+    mavenCentral()
+    maven { url = 'https://repo.grails.org/grails/core' }
+}
+
+dependencies {
+    implementation platform("org.apache.grails:grails-bom:$grailsVersion")
+
+    implementation 'org.apache.grails:grails-core'
+    implementation 'org.apache.grails:grails-web-boot'
+    implementation 'org.apache.grails:grails-logging'
+    implementation "org.apache.grails:grails-spring-security:$springSecurityVersion"
+    implementation "org.apache.grails:grails-spring-security-rest:$springSecurityRestVersion"
+    implementation 'org.springframework.boot:spring-boot-starter-tomcat'
+
+    runtimeOnly 'com.h2database:h2'
+
+    integrationTestImplementation 'org.apache.grails:grails-testing-support-web'
+}
+
+java {
+    toolchain { languageVersion = JavaLanguageVersion.of(21) }
+}
+
+tasks.withType(Test).configureEach {
+    useJUnitPlatform()
+    testLogging { events 'passed', 'failed'; exceptionFormat 'short' }
+    outputs.upToDateWhen { false }
+}
